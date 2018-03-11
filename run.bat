@@ -1,0 +1,1 @@
+java --class-path target arm.ARM datasets\kosarak.csv

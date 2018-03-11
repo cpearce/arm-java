@@ -1,0 +1,1 @@
+"%JAVA_HOME%"\bin\javac src\*.java -g -d target
