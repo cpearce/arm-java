@@ -29,12 +29,14 @@ public class ARM {
       numTransactions++;
     }
 
+    System.out.println("Read " + numTransactions);
+
     // Make another pass to build the FPTree.
     final int minCount = (int) (numTransactions * minimumSupport);
     try {
-      reader = DataSetReader.open(args[0], itemizer);
+      reader.reset();
     } catch (IOException e) {
-      System.err.println("Can't reopen " + args[0] + " for input");
+      System.err.println("Can't reset " + args[0] + " for input");
       System.exit(1);
       return;
     }

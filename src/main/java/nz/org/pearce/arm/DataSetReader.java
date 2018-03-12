@@ -9,10 +9,13 @@ import java.util.HashSet;
 public class DataSetReader {
 
   public static DataSetReader open(String path, Itemizer itemizer) throws IOException {
-    return new DataSetReader(new BufferedReader(new FileReader(path)), itemizer);
+    RandomAccessFile file = new RandomAccessFile(new File(path), "r");
+    BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file.getFD())));
+    return new DataSetReader(file, reader, itemizer);
   }
 
-  private DataSetReader(BufferedReader reader, Itemizer itemizer) {
+  private DataSetReader(RandomAccessFile file, BufferedReader reader, Itemizer itemizer) {
+    this.file = file;
     this.reader = reader;
     this.itemizer = itemizer;
   }
@@ -60,6 +63,12 @@ public class DataSetReader {
     return frequentItems.stream().mapToInt(i -> i).toArray();
   }
 
+  void reset() throws IOException{
+    file.seek(0);
+    reader = new BufferedReader(new InputStreamReader(new FileInputStream(file.getFD())));
+  }
+
+  private RandomAccessFile file;
   private BufferedReader reader;
   private Itemizer itemizer;
 }
