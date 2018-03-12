@@ -1,0 +1,1 @@
+java -cp target/arm-1.0-SNAPSHOT.jar nz.org.pearce.arm.ARM datasets/kosarak.csv

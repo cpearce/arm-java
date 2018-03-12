@@ -1,9 +1,13 @@
 package nz.org.pearce.arm;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashSet;
 
 public class DataSetReader {
- 
+
   public static DataSetReader open(String path, Itemizer itemizer) throws IOException {
     return new DataSetReader(new BufferedReader(new FileReader(path)), itemizer);
   }
@@ -13,19 +17,47 @@ public class DataSetReader {
     this.itemizer = itemizer;
   }
 
+  private HashSet<Integer> nextAsSet() {
+    String line = null;
+    try {
+      line = reader.readLine();
+    } catch (IOException exception) {
+      return null;
+    }
+    if (line == null) {
+      return null;
+    }
+    String[] strings = line.split(",");
+    HashSet<Integer> itemset = new HashSet<Integer>();
+    for (int i = 0; i < strings.length; i++) {
+      itemset.add(itemizer.idOf(strings[i].trim()));
+    }
+    return itemset;
+  }
+
   public int[] next() {
-      String line = null;
-      try {
-        line = reader.readLine();
-      } catch (IOException exception) {
-        return null;
+    HashSet<Integer> itemset = nextAsSet();
+    if (itemset == null) {
+      return null;
+    }
+    int[] items = itemset.stream().mapToInt(i -> i).toArray();
+    return items;
+  }
+
+  public int[] nextAboveMinCount(int minCount, ItemCounter itemCounter) {
+    HashSet<Integer> itemset = nextAsSet();
+    if (itemset == null) {
+      return null;
+    }
+    ArrayList<Integer> frequentItems = new ArrayList<Integer>();
+    for (int item : itemset) {
+      if (itemCounter.count(item) >= minCount) {
+        frequentItems.add(item);
       }
-      String[] strings = line.split(",");
-      int[] items = new int[strings.length];
-      for (int i = 0; i < strings.length; i++) {
-        items[i] = itemizer.idOf(strings[i].trim());
-      }
-      return items;
+    }
+    // Sort by decreasing order of frequency.
+    frequentItems.sort(((a, b) -> itemCounter.count(a) - itemCounter.count(b)));
+    return frequentItems.stream().mapToInt(i -> i).toArray();
   }
 
   private BufferedReader reader;

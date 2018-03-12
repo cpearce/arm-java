@@ -3,12 +3,12 @@ package nz.org.pearce.arm;
 import java.util.HashMap;
 
 public class Itemizer {
-  
+
   public Itemizer() {
     idToStr = new HashMap<Integer, String>();
     strToId = new HashMap<String, Integer>();
   }
-  
+
   public int idOf(String item) {
     Integer i = strToId.get(item);
     if (i == null) {
