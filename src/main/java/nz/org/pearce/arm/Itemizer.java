@@ -1,4 +1,4 @@
-package arm;
+package nz.org.pearce.arm;
 
 import java.util.HashMap;
 

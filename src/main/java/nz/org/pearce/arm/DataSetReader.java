@@ -1,6 +1,5 @@
-package arm;
+package nz.org.pearce.arm;
 
-import java.util.Iterator;
 import java.io.*;
 
 public class DataSetReader {
