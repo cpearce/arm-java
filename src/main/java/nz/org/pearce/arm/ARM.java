@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 public class ARM {
 
-
   public static void main(String[] args) {
     System.out.println("Association Rule Mining with Java");
     Arguments arguments = Arguments.parseOrDie(args);
@@ -40,10 +39,18 @@ public class ARM {
     System.out.println("" + numTransactions + " transactions");
     System.out.println("Building initial FPTree");
     final int minCount = (int) (numTransactions * arguments.minimumSupport);
+    System.out.println("MinCount=" + minCount);
     reader.reset();
+    FPTree tree = new FPTree();
     while ((itemset = reader.nextAboveMinCount(minCount, itemCounter)) != null) {
-      // TODO: Insert into FPTree.
+      tree.insert(itemset, 1);
     }
 
+    System.out.println("Generating frequent patterns with FPGrowth");
+    ArrayList<FrequentPattern> itemsets = tree.growFrequentPatterns(minCount, numTransactions);
+    System.out.println("Generated " + itemsets.size() + " frequent patterns");
+    for (FrequentPattern pattern : itemsets) {
+      System.out.println(pattern);
+    }
   }
 }
