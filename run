@@ -1,1 +1,6 @@
-java -cp target/arm-1.0-SNAPSHOT.jar nz.org.pearce.arm.ARM datasets/kosarak.csv
+java -cp target/arm-1.0-SNAPSHOT.jar nz.org.pearce.arm.ARM \
+  --input datasets/kosarak.csv \
+  --output rules \
+  --minimum-support 0.05 \
+  --minimum-confidence 0.05 \
+  --minimum-lift 1.0

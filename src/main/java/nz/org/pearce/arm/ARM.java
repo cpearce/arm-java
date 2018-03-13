@@ -4,21 +4,29 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class ARM {
+
+
   public static void main(String[] args) {
-
-    final double minimumSupport = 0.05;
-
-    DataSetReader reader;
-    Itemizer itemizer = new Itemizer();
+    System.out.println("Association Rule Mining with Java");
+    Arguments arguments = Arguments.parseOrDie(args);
     try {
-      reader = DataSetReader.open(args[0], itemizer);
+      (new ARM()).run(arguments);
     } catch (IOException e) {
-      System.err.println("Can't open " + args[0] + " for input");
-      System.exit(1);
-      return;
+      e.printStackTrace();
     }
+  }
 
-    // Make one pass to count the item frequencies.
+  public void run(Arguments arguments) throws IOException {
+    System.out.println("Input: " + arguments.inputPath);
+    System.out.println("Output: " + arguments.outputPath);
+    System.out.println("Minimum Support: " + arguments.minimumSupport);
+    System.out.println("Minimum Confidence: " + arguments.minimumConfidence);
+    System.out.println("Minimum Lift: " + arguments.minimumLift);
+    System.out.println("");
+
+    System.out.println("Counting item frequencies");
+    Itemizer itemizer = new Itemizer();
+    DataSetReader reader = DataSetReader.open(arguments.inputPath, itemizer);
     ItemCounter itemCounter = new ItemCounter();
     int[] itemset = null;
     int numTransactions = 0;
@@ -29,18 +37,10 @@ public class ARM {
       numTransactions++;
     }
 
-    System.out.println("Read " + numTransactions);
-
-    // Make another pass to build the FPTree.
-    final int minCount = (int) (numTransactions * minimumSupport);
-    try {
-      reader.reset();
-    } catch (IOException e) {
-      System.err.println("Can't reset " + args[0] + " for input");
-      System.exit(1);
-      return;
-    }
-
+    System.out.println("" + numTransactions + " transactions");
+    System.out.println("Building initial FPTree");
+    final int minCount = (int) (numTransactions * arguments.minimumSupport);
+    reader.reset();
     while ((itemset = reader.nextAboveMinCount(minCount, itemCounter)) != null) {
       // TODO: Insert into FPTree.
     }
