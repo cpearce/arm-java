@@ -2,7 +2,7 @@ package nz.org.pearce.arm;
 
 import java.io.File;
 
-class Arguments {
+public class Arguments {
 
   public String inputPath;
   public String outputPath;
