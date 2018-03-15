@@ -21,6 +21,7 @@ class FrequentPattern {
     for (int item : itemset) {
       if (!first) {
         s.append(",");
+      } else {
         first = false;
       }
       s.append(item);
