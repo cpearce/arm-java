@@ -26,15 +26,8 @@ public class ARM {
     System.out.println("Counting item frequencies");
     Itemizer itemizer = new Itemizer();
     DataSetReader reader = DataSetReader.open(arguments.inputPath, itemizer);
-    ItemCounter itemCounter = new ItemCounter();
-    int[] itemset = null;
-    int numTransactions = 0;
-    while ((itemset = reader.next()) != null) {
-      for (int item : itemset) {
-        itemCounter.increment(item);
-      }
-      numTransactions++;
-    }
+    ItemCounter itemCounter = reader.countItemFrequencies();
+    int numTransactions = reader.getNumTransactions();
 
     System.out.println("" + numTransactions + " transactions");
     System.out.println("Building initial FPTree");
@@ -42,6 +35,7 @@ public class ARM {
     System.out.println("MinCount=" + minCount);
     reader.reset();
     FPTree tree = new FPTree();
+    int[] itemset = null;
     while ((itemset = reader.nextAboveMinCount(minCount, itemCounter)) != null) {
       tree.insert(itemset, 1);
     }

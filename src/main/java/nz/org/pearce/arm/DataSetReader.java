@@ -8,6 +8,23 @@ import java.util.HashSet;
 
 public class DataSetReader {
 
+  private int numTransactions = 0;
+
+  public ItemCounter countItemFrequencies() throws IOException {
+    ItemCounter itemCounter = new ItemCounter();
+    HashSet<Integer> itemset = null;
+    while ((itemset = nextAsSet()) != null) {
+      for (int item : itemset) {
+        itemCounter.increment(item);
+      }
+    }
+    return itemCounter;
+  }
+
+  public int getNumTransactions() {
+    return numTransactions;
+  }
+
   public static DataSetReader open(String path, Itemizer itemizer) throws IOException {
     RandomAccessFile file = new RandomAccessFile(new File(path), "r");
     BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file.getFD())));
@@ -35,6 +52,7 @@ public class DataSetReader {
     for (int i = 0; i < strings.length; i++) {
       itemset.add(itemizer.idOf(strings[i].trim()));
     }
+    numTransactions++;
     return itemset;
   }
 
@@ -65,6 +83,7 @@ public class DataSetReader {
 
   void reset() throws IOException{
     file.seek(0);
+    numTransactions = 0;
     reader = new BufferedReader(new InputStreamReader(new FileInputStream(file.getFD())));
   }
 
