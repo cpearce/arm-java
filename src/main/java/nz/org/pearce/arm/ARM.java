@@ -8,6 +8,12 @@ public class ARM {
   public static void main(String[] args) {
     System.out.println("Association Rule Mining with Java");
     Arguments arguments = Arguments.parseOrDie(args);
+    System.out.println("Input: " + arguments.inputPath);
+    System.out.println("Output: " + arguments.outputPath);
+    System.out.println("Minimum Support: " + arguments.minimumSupport);
+    System.out.println("Minimum Confidence: " + arguments.minimumConfidence);
+    System.out.println("Minimum Lift: " + arguments.minimumLift);
+    System.out.println("");
     try {
       (new ARM()).run(arguments);
     } catch (IOException e) {
@@ -16,12 +22,6 @@ public class ARM {
   }
 
   public void run(Arguments arguments) throws IOException {
-    System.out.println("Input: " + arguments.inputPath);
-    System.out.println("Output: " + arguments.outputPath);
-    System.out.println("Minimum Support: " + arguments.minimumSupport);
-    System.out.println("Minimum Confidence: " + arguments.minimumConfidence);
-    System.out.println("Minimum Lift: " + arguments.minimumLift);
-    System.out.println("");
 
     System.out.println("Counting item frequencies");
     Itemizer itemizer = new Itemizer();
