@@ -40,21 +40,21 @@ public class Arguments {
         outputPath = args[i + 1];
         i++;
         haveOutputPath = true;
-      } else if (args[i].equals("--minimum-support")) {
+      } else if (args[i].equals("--min-support")) {
         String errorMessage =
-            "You must supply a float value in range [0,1] with '--minimum-support'";
+            "You must supply a float value in range [0,1] with '--min-support'";
         minimumSupport = parseDoubleOrDie(i + 1, args, errorMessage, 0.0, 1.0);
         i++;
         haveMinimumSupport = true;
-      } else if (args[i].equals("--minimum-confidence")) {
+      } else if (args[i].equals("--min-confidence")) {
         String errorMessage =
-            "You must supply a float value in range [0,1] with '--minimum-confidence'";
+            "You must supply a float value in range [0,1] with '--min-confidence'";
         minimumConfidence = parseDoubleOrDie(i + 1, args, errorMessage, 0.0, 1.0);
         i++;
         haveMinimumConfidence = true;
-      } else if (args[i].equals("--minimum-lift")) {
+      } else if (args[i].equals("--min-lift")) {
         String errorMessage =
-            "You must supply a float value in range [1,+Inf] with '--minimum-lift'";
+            "You must supply a float value in range [1,+Inf] with '--min-lift'";
         minimumLift =
             parseDoubleOrDie(i + 1, args, errorMessage, 1.0, Double.MAX_VALUE);
         haveMinimumLift = true;
@@ -77,17 +77,17 @@ public class Arguments {
     }
     if (!haveMinimumSupport) {
       System.err.println(
-          "You must supply a minimum support in range [0,1] with --minimum-support $value");
+          "You must supply a minimum support in range [0,1] with --min-support $value");
       errors++;
     }
     if (!haveMinimumConfidence) {
       System.err.println(
-          "You must supply a minimum confidence in range [0,1] with --minimum-confidence $value");
+          "You must supply a minimum confidence in range [0,1] with --min-confidence $value");
       errors++;
     }
     if (!haveMinimumLift) {
       System.err.println(
-          "You must supply a minimum lift in range [1,+Inf] with --minimum-lift $value");
+          "You must supply a minimum lift in range [1,+Inf] with --min-lift $value");
       errors++;
     }
     if (errors > 0) {
