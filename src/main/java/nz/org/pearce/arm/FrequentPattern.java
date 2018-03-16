@@ -16,16 +16,7 @@ class FrequentPattern {
 
   public String toString() {
     StringBuffer s = new StringBuffer();
-    boolean first = true;
-    s.append("[");
-    for (int item : itemset) {
-      if (!first) {
-        s.append(",");
-      } else {
-        first = false;
-      }
-      s.append(item);
-    }
+    s.append(IntSets.toString(itemset));
     s.append("] count=" + count);
     return s.toString();
   }

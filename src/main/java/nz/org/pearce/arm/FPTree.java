@@ -19,9 +19,7 @@ class FPNode {
     return null;
   }
 
-  boolean isRoot() {
-    return this.item == 0;
-  }
+  boolean isRoot() { return this.item == 0; }
 
   int item = 0;
   int count = 0;
@@ -35,6 +33,10 @@ public class FPTree {
   HashMap<Integer, ArrayList<FPNode>> itemLists =
       new HashMap<Integer, ArrayList<FPNode>>();
 
+  /**
+   * Inserts a transaction into the tree. The items in the transaction are
+   * assumed to be sorted in non-increasing order of frequency.
+   */
   public void insert(int[] itemset, int count) {
     FPNode node = root;
     for (int item : itemset) {
@@ -59,18 +61,26 @@ public class FPTree {
     itemList.add(child);
   }
 
-  public ArrayList<FrequentPattern> growFrequentPatterns(int minCount, int numTransactions) {
-    return growFrequentPatterns(minCount, new ArrayList<Integer>(), numTransactions);
+  /**
+   * Generate frequent patterns using the FP-Growth algorithm.
+   */
+  public ArrayList<FrequentPattern> growFrequentPatterns(int minCount,
+                                                         int numTransactions) {
+    return growFrequentPatterns(minCount, new ArrayList<Integer>(),
+                                numTransactions);
   }
 
-  private ArrayList<FrequentPattern> growFrequentPatterns(int minCount, ArrayList<Integer> path, int pathCount) {
-    ArrayList<FrequentPattern> frequentPatterns = new ArrayList<FrequentPattern>();
+  private ArrayList<FrequentPattern>
+  growFrequentPatterns(int minCount, ArrayList<Integer> path, int pathCount) {
+    ArrayList<FrequentPattern> frequentPatterns =
+        new ArrayList<FrequentPattern>();
     ArrayList<Integer> items = itemCounter.itemsWithCountAtLeast(minCount);
     for (Integer item : items) {
       path.add(item);
       FPTree conditionalTree = constructConditionalTree(item);
       int newPathCount = Math.min(pathCount, itemCounter.count(item));
-      frequentPatterns.addAll(conditionalTree.growFrequentPatterns(minCount, path, newPathCount));
+      frequentPatterns.addAll(
+          conditionalTree.growFrequentPatterns(minCount, path, newPathCount));
       frequentPatterns.add(new FrequentPattern(path, newPathCount));
       path.remove(path.size() - 1);
     }
@@ -99,5 +109,4 @@ public class FPTree {
     Collections.reverse(path);
     return path.stream().mapToInt(i -> i).toArray();
   }
-
 }

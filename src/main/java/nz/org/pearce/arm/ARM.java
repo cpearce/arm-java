@@ -2,6 +2,7 @@ package nz.org.pearce.arm;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class ARM {
 
@@ -31,20 +32,30 @@ public class ARM {
 
     System.out.println("" + numTransactions + " transactions");
     System.out.println("Building initial FPTree");
-    final int minCount = (int) (numTransactions * arguments.minimumSupport);
+    final int minCount = (int)(numTransactions * arguments.minimumSupport);
     System.out.println("MinCount=" + minCount);
     reader.reset();
     FPTree tree = new FPTree();
     int[] itemset = null;
-    while ((itemset = reader.nextAboveMinCount(minCount, itemCounter)) != null) {
+    while ((itemset = reader.nextAboveMinCount(minCount, itemCounter)) !=
+           null) {
       tree.insert(itemset, 1);
     }
 
     System.out.println("Generating frequent patterns with FPGrowth");
-    ArrayList<FrequentPattern> itemsets = tree.growFrequentPatterns(minCount, numTransactions);
+    ArrayList<FrequentPattern> itemsets =
+        tree.growFrequentPatterns(minCount, numTransactions);
     System.out.println("Generated " + itemsets.size() + " frequent patterns");
     for (FrequentPattern pattern : itemsets) {
       System.out.println(pattern);
+    }
+
+    RuleGenerator ruleGenerator = new RuleGenerator();
+    HashSet<Rule> rules = ruleGenerator.generate(
+        itemsets, numTransactions, arguments.minimumConfidence, arguments.minimumLift);
+    System.out.println("Generated " + rules.size() + " rules");
+    for (Rule rule : rules) {
+      System.out.println(rule);
     }
   }
 }
