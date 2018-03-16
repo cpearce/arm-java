@@ -4,6 +4,12 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+class Timer {
+  private long time = System.currentTimeMillis();
+  void reset() { time = System.currentTimeMillis(); }
+  long elapsed() { return System.currentTimeMillis() - time; }
+}
+
 public class ARM {
 
   public static void main(String[] args) {
@@ -23,17 +29,21 @@ public class ARM {
   }
 
   public void run(Arguments arguments) throws IOException {
-
+    Timer total = new Timer();
+    Timer timer = new Timer();
     System.out.println("Counting item frequencies");
     Itemizer itemizer = new Itemizer();
     DataSetReader reader = DataSetReader.open(arguments.inputPath, itemizer);
     ItemCounter itemCounter = reader.countItemFrequencies();
     int numTransactions = reader.getNumTransactions();
-
+    System.out.println("Counted item frequencies in " + timer.elapsed() +
+                       " ms");
     System.out.println("" + numTransactions + " transactions");
-    System.out.println("Building initial FPTree");
     final int minCount = (int)(numTransactions * arguments.minimumSupport);
     System.out.println("MinCount=" + minCount);
+
+    System.out.println("Building initial FPTree");
+    timer.reset();
     reader.reset();
     FPTree tree = new FPTree();
     int[] itemset = null;
@@ -41,21 +51,30 @@ public class ARM {
            null) {
       tree.insert(itemset, 1);
     }
+    System.out.println("Built initial FPTree in " + timer.elapsed() + " ms");
 
-    System.out.println("Generating frequent patterns with FPGrowth");
+    System.out.println("Generating frequent patterns with FPGrowth...");
+    timer.reset();
     ArrayList<FrequentPattern> itemsets =
         tree.growFrequentPatterns(minCount, numTransactions);
-    System.out.println("Generated " + itemsets.size() + " frequent patterns");
+    System.out.println("Generated " + itemsets.size() +
+                       " frequent patterns in " + timer.elapsed() + " ms");
     for (FrequentPattern pattern : itemsets) {
       System.out.println(pattern);
     }
 
+    System.out.println("Generating rules...");
+    timer.reset();
     RuleGenerator ruleGenerator = new RuleGenerator();
-    HashSet<Rule> rules = ruleGenerator.generate(
-        itemsets, numTransactions, arguments.minimumConfidence, arguments.minimumLift);
-    System.out.println("Generated " + rules.size() + " rules");
+    HashSet<Rule> rules = ruleGenerator.generate(itemsets, numTransactions,
+                                                 arguments.minimumConfidence,
+                                                 arguments.minimumLift);
+    System.out.println("Generated " + rules.size() + " rules in " +
+                       timer.elapsed() + " ms");
     for (Rule rule : rules) {
       System.out.println(rule);
     }
+
+    System.out.println("Total runtime " + total.elapsed() + " ms");
   }
 }
