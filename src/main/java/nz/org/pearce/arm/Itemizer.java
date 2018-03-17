@@ -15,6 +15,7 @@ public class Itemizer {
       int id = nextId;
       nextId++;
       strToId.put(item, id);
+      idToStr.put(id, item);
       return id;
     } else {
       return i;
@@ -27,6 +28,15 @@ public class Itemizer {
       return "UnknownItem";
     }
     return n;
+  }
+
+  public String[] namesOf(int[] items) {
+    String[] names = new String[items.length];
+    int index = 0;
+    for (int item : items) {
+      names[index++] = nameOf(item);
+    }
+    return names;
   }
 
   private HashMap<Integer, String> idToStr;

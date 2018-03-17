@@ -4,15 +4,18 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-class Timer {
+class Timer
+{
   private long time = System.currentTimeMillis();
   void reset() { time = System.currentTimeMillis(); }
   long elapsed() { return System.currentTimeMillis() - time; }
 }
 
-public class ARM {
+public class ARM
+{
 
-  public static void main(String[] args) {
+  public static void main(String[] args)
+  {
     System.out.println("Association Rule Mining with Java");
     Arguments arguments = Arguments.parseOrDie(args);
     System.out.println("Input: " + arguments.inputPath);
@@ -28,7 +31,8 @@ public class ARM {
     }
   }
 
-  public void run(Arguments arguments) throws IOException {
+  public void run(Arguments arguments) throws IOException
+  {
     Timer total = new Timer();
     Timer timer = new Timer();
     System.out.println("Counting item frequencies");
@@ -56,25 +60,70 @@ public class ARM {
     System.out.println("Generating frequent patterns with FPGrowth...");
     timer.reset();
     ArrayList<FrequentPattern> itemsets =
-        tree.growFrequentPatterns(minCount, numTransactions);
+      tree.growFrequentPatterns(minCount, numTransactions);
     System.out.println("Generated " + itemsets.size() +
                        " frequent patterns in " + timer.elapsed() + " ms");
-    for (FrequentPattern pattern : itemsets) {
-      System.out.println(pattern);
-    }
+    // for (FrequentPattern pattern : itemsets) {
+    //   System.out.println(pattern);
+    // }
 
     System.out.println("Generating rules...");
     timer.reset();
     RuleGenerator ruleGenerator = new RuleGenerator();
-    HashSet<Rule> rules = ruleGenerator.generate(itemsets, numTransactions,
+    HashSet<Rule> rules = ruleGenerator.generate(itemsets,
+                                                 numTransactions,
                                                  arguments.minimumConfidence,
                                                  arguments.minimumLift);
     System.out.println("Generated " + rules.size() + " rules in " +
                        timer.elapsed() + " ms");
-    for (Rule rule : rules) {
-      System.out.println(rule);
-    }
+
+    System.out.println("Writing rules to file");
+    timer.reset();
+    long size = writeRules(rules, arguments.outputPath, itemizer);
+    long elapsed = timer.elapsed();
+    System.out.println("Wrote rules to file in " + elapsed + " ms, " + MBPS(size, elapsed) + " MB/s");
 
     System.out.println("Total runtime " + total.elapsed() + " ms");
+  }
+
+  private String MBPS(long size, long ms) {
+    return String.format("%.2f", (double)size / ((double)ms / 1000) / 1000000);
+  }
+
+  private long writeRules(HashSet<Rule> rules, String outputPath, Itemizer itemizer)
+    throws IOException
+  {
+    BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath));
+    writer.write("Antecedent => Consequent, Confidence, Lift, Support");
+    writer.newLine();
+    for (Rule rule : rules) {
+      writeItems(writer, rule.antecedent, itemizer);
+      writer.write(" => ");
+      writeItems(writer, rule.consequent, itemizer);
+      writer.write(",");
+      writer.write(String.format("%.4f", rule.confidence));
+      writer.write(",");
+      writer.write(String.format("%.4f", rule.lift));
+      writer.write(",");
+      writer.write(String.format("%.4f", rule.support));
+      writer.newLine();
+    }
+    writer.close();
+    return (new File(outputPath)).length();
+  }
+
+  private void writeItems(BufferedWriter writer, int[] items, Itemizer itemizer)
+    throws IOException
+  {
+    String[] names = itemizer.namesOf(items);
+    boolean first = true;
+    for (String name : names) {
+      if (!first) {
+        writer.write(" ");
+      } else {
+        first = false;
+      }
+      writer.write(name);
+    }
   }
 }
