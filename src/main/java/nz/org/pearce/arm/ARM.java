@@ -93,37 +93,35 @@ public class ARM
   private long writeRules(HashSet<Rule> rules, String outputPath, Itemizer itemizer)
     throws IOException
   {
-    BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath));
-    writer.write("Antecedent => Consequent, Confidence, Lift, Support");
-    writer.newLine();
+    PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(outputPath)));
+    writer.println("Antecedent => Consequent, Confidence, Lift, Support");
     for (Rule rule : rules) {
       writeItems(writer, rule.antecedent, itemizer);
-      writer.write(" => ");
+      writer.print(" => ");
       writeItems(writer, rule.consequent, itemizer);
-      writer.write(",");
-      writer.write(String.format("%.4f", rule.confidence));
-      writer.write(",");
-      writer.write(String.format("%.4f", rule.lift));
-      writer.write(",");
-      writer.write(String.format("%.4f", rule.support));
-      writer.newLine();
+      writer.print(",");
+      writer.print(rule.confidence);
+      writer.print(",");
+      writer.print(rule.lift);
+      writer.print(",");
+      writer.println(rule.support);
     }
     writer.close();
     return (new File(outputPath)).length();
   }
 
-  private void writeItems(BufferedWriter writer, int[] items, Itemizer itemizer)
+  private void writeItems(PrintWriter writer, int[] items, Itemizer itemizer)
     throws IOException
   {
     String[] names = itemizer.namesOf(items);
     boolean first = true;
     for (String name : names) {
       if (!first) {
-        writer.write(" ");
+        writer.print(" ");
       } else {
         first = false;
       }
-      writer.write(name);
+      writer.print(name);
     }
   }
 }
