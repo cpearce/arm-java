@@ -1,5 +1,7 @@
 package nz.org.pearce.arm;
 
+import java.util.Arrays;
+
 /**
  * Represents an association rule of the form antecedent -> consequent.
  * Also stores the support, confidence, and lift of the rule.
@@ -12,6 +14,24 @@ public class Rule
   public double support;
   public double confidence;
   public double lift;
+
+  public boolean equals(Object object)
+  {
+    if (object == null || !(object instanceof Rule)) {
+      return false;
+    }
+    Rule other = (Rule)object;
+    if (other == this) {
+      return true;
+    }
+    return Arrays.equals(antecedent, other.antecedent) &&
+      Arrays.equals(consequent, other.consequent);
+  }
+
+  public int hashCode()
+  {
+    return Arrays.hashCode(antecedent) ^ Arrays.hashCode(consequent);
+  }
 
   private Rule(int[] antecedent,
                int[] consequent,
