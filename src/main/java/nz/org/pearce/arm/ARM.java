@@ -43,7 +43,7 @@ public class ARM
     System.out.println("Counted item frequencies in " + timer.elapsed() +
                        " ms");
     System.out.println("" + numTransactions + " transactions");
-    final int minCount = (int)(numTransactions * arguments.minimumSupport);
+    final int minCount = (int)(Math.ceil(numTransactions * arguments.minimumSupport));
     System.out.println("MinCount=" + minCount);
 
     System.out.println("Building initial FPTree");
