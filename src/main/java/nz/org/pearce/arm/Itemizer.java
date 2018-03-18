@@ -2,14 +2,17 @@ package nz.org.pearce.arm;
 
 import java.util.HashMap;
 
-public class Itemizer {
+public class Itemizer
+{
 
-  public Itemizer() {
+  public Itemizer()
+  {
     idToStr = new HashMap<Integer, String>();
     strToId = new HashMap<String, Integer>();
   }
 
-  public int idOf(String item) {
+  public int idOf(String item)
+  {
     Integer i = strToId.get(item);
     if (i == null) {
       int id = nextId;
@@ -22,7 +25,8 @@ public class Itemizer {
     }
   }
 
-  public String nameOf(int id) {
+  public String nameOf(int id)
+  {
     String n = idToStr.get(id);
     if (n == null) {
       return "UnknownItem";
@@ -30,7 +34,8 @@ public class Itemizer {
     return n;
   }
 
-  public String[] namesOf(int[] items) {
+  public String[] namesOf(int[] items)
+  {
     String[] names = new String[items.length];
     int index = 0;
     for (int item : items) {

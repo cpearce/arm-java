@@ -1,8 +1,10 @@
 package nz.org.pearce.arm;
 
-public class IntSets {
+public class IntSets
+{
 
-  public static int[] without(int[] A, int value) {
+  public static int[] without(int[] A, int value)
+  {
     if (A.length == 0) {
       return new int[0];
     }
@@ -16,7 +18,8 @@ public class IntSets {
     return B;
   }
 
-  public static int[] union(int[] A, int[] B) {
+  public static int[] union(int[] A, int[] B)
+  {
     int a = 0;
     int b = 0;
 
@@ -66,7 +69,8 @@ public class IntSets {
     return C;
   }
 
-  public static int[] intersection(int[] A, int[] B) {
+  public static int[] intersection(int[] A, int[] B)
+  {
     int a = 0;
     int b = 0;
 
@@ -103,7 +107,8 @@ public class IntSets {
     return C;
   }
 
-  public static String toString(int[] A) {
+  public static String toString(int[] A)
+  {
     StringBuffer s = new StringBuffer();
     boolean first = true;
     s.append("[");
@@ -118,5 +123,4 @@ public class IntSets {
     s.append("]");
     return s.toString();
   }
-
 }

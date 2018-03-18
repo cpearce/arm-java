@@ -2,7 +2,8 @@ package nz.org.pearce.arm;
 
 import java.io.File;
 
-public class Arguments {
+public class Arguments
+{
 
   public String inputPath;
   public String outputPath;
@@ -10,7 +11,8 @@ public class Arguments {
   public double minimumConfidence = 0.0;
   public double minimumLift;
 
-  public static Arguments parseOrDie(String[] args) {
+  public static Arguments parseOrDie(String[] args)
+  {
     String inputPath = "";
     boolean haveInputPath = false;
     String outputPath = "";
@@ -24,8 +26,7 @@ public class Arguments {
     for (int i = 0; i < args.length; i++) {
       if (args[i].equals("--input")) {
         if (i + 1 == args.length || !(new File(args[i + 1])).exists()) {
-          System.err.println(
-              "You must supply a valid path with '--input'");
+          System.err.println("You must supply a valid path with '--input'");
           System.exit(-1);
         }
         inputPath = args[i + 1];
@@ -33,8 +34,7 @@ public class Arguments {
         haveInputPath = true;
       } else if (args[i].equals("--output")) {
         if (i + 1 == args.length) {
-          System.err.println(
-              "You must supply a valid path with '--output'");
+          System.err.println("You must supply a valid path with '--output'");
           System.exit(-1);
         }
         outputPath = args[i + 1];
@@ -42,21 +42,22 @@ public class Arguments {
         haveOutputPath = true;
       } else if (args[i].equals("--min-support")) {
         String errorMessage =
-            "You must supply a float value in range [0,1] with '--min-support'";
+          "You must supply a float value in range [0,1] with '--min-support'";
         minimumSupport = parseDoubleOrDie(i + 1, args, errorMessage, 0.0, 1.0);
         i++;
         haveMinimumSupport = true;
       } else if (args[i].equals("--min-confidence")) {
         String errorMessage =
-            "You must supply a float value in range [0,1] with '--min-confidence'";
-        minimumConfidence = parseDoubleOrDie(i + 1, args, errorMessage, 0.0, 1.0);
+          "You must supply a float value in range [0,1] with '--min-confidence'";
+        minimumConfidence =
+          parseDoubleOrDie(i + 1, args, errorMessage, 0.0, 1.0);
         i++;
         haveMinimumConfidence = true;
       } else if (args[i].equals("--min-lift")) {
         String errorMessage =
-            "You must supply a float value in range [1,+Inf] with '--min-lift'";
+          "You must supply a float value in range [1,+Inf] with '--min-lift'";
         minimumLift =
-            parseDoubleOrDie(i + 1, args, errorMessage, 1.0, Double.MAX_VALUE);
+          parseDoubleOrDie(i + 1, args, errorMessage, 1.0, Double.MAX_VALUE);
         haveMinimumLift = true;
         i++;
       } else {
@@ -67,38 +68,42 @@ public class Arguments {
     int errors = 0;
     if (!haveInputPath) {
       System.err.println(
-          "You must supply an input path with --input-path $path");
+        "You must supply an input path with --input-path $path");
       errors++;
     }
     if (!haveOutputPath) {
       System.err.println(
-          "You must supply an output path with --output-path $path");
+        "You must supply an output path with --output-path $path");
       errors++;
     }
     if (!haveMinimumSupport) {
       System.err.println(
-          "You must supply a minimum support in range [0,1] with --min-support $value");
+        "You must supply a minimum support in range [0,1] with --min-support $value");
       errors++;
     }
     if (!haveMinimumConfidence) {
       System.err.println(
-          "You must supply a minimum confidence in range [0,1] with --min-confidence $value");
+        "You must supply a minimum confidence in range [0,1] with --min-confidence $value");
       errors++;
     }
     if (!haveMinimumLift) {
       System.err.println(
-          "You must supply a minimum lift in range [1,+Inf] with --min-lift $value");
+        "You must supply a minimum lift in range [1,+Inf] with --min-lift $value");
       errors++;
     }
     if (errors > 0) {
       System.exit(-1);
     }
-    return new Arguments(inputPath, outputPath, minimumSupport,
-                         minimumConfidence, minimumLift);
+    return new Arguments(
+      inputPath, outputPath, minimumSupport, minimumConfidence, minimumLift);
   }
 
-  private Arguments(String inputPath, String outputPath, double minimumSupport,
-                    double minimumConfidence, double minimumLift) {
+  private Arguments(String inputPath,
+                    String outputPath,
+                    double minimumSupport,
+                    double minimumConfidence,
+                    double minimumLift)
+  {
     this.inputPath = inputPath;
     this.outputPath = outputPath;
     this.minimumSupport = minimumSupport;
@@ -106,8 +111,12 @@ public class Arguments {
     this.minimumLift = minimumLift;
   }
 
-  private static double parseDoubleOrDie(int index, String[] args, String errorMessage,
-                                  double minimum, double maximum) {
+  private static double parseDoubleOrDie(int index,
+                                         String[] args,
+                                         String errorMessage,
+                                         double minimum,
+                                         double maximum)
+  {
     if (index == args.length) {
       System.err.println(errorMessage);
       System.exit(-1);

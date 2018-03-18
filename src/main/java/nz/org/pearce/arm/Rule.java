@@ -4,7 +4,8 @@ package nz.org.pearce.arm;
  * Represents an association rule of the form antecedent -> consequent.
  * Also stores the support, confidence, and lift of the rule.
  */
-public class Rule {
+public class Rule
+{
 
   public int[] antecedent;
   public int[] consequent;
@@ -12,8 +13,12 @@ public class Rule {
   public double confidence;
   public double lift;
 
-  private Rule(int[] antecedent, int[] consequent, double support,
-               double confidence, double lift) {
+  private Rule(int[] antecedent,
+               int[] consequent,
+               double support,
+               double confidence,
+               double lift)
+  {
     this.antecedent = antecedent;
     this.consequent = consequent;
     this.support = support;
@@ -25,9 +30,12 @@ public class Rule {
    * Creates a new association rule with supplied antecedent/consequent
    * provided minimum support, confidence, and lift thresholds are staisfied.
    */
-  public static Rule make(int[] antecedent, int[] consequent,
-                          ItemsetSupport supports, double minimumConfidence,
-                          double minimumLift) {
+  public static Rule make(int[] antecedent,
+                          int[] consequent,
+                          ItemsetSupport supports,
+                          double minimumConfidence,
+                          double minimumLift)
+  {
     if (antecedent.length == 0 || consequent.length == 0) {
       return null;
     }
@@ -52,18 +60,23 @@ public class Rule {
    * the union of both rules consequents, provided minimum support, confidence
    * and lift thresholds are satisfied.
    */
-  public static Rule merge(Rule a, Rule b, double minimumConfidence,
-                           double minimumLift, ItemsetSupport supports) {
+  public static Rule merge(Rule a,
+                           Rule b,
+                           double minimumConfidence,
+                           double minimumLift,
+                           ItemsetSupport supports)
+  {
     int[] antecedent = IntSets.intersection(a.antecedent, b.antecedent);
     int[] consequent = IntSets.union(a.consequent, b.consequent);
-    return make(antecedent, consequent, supports, minimumConfidence,
-                minimumLift);
+    return make(
+      antecedent, consequent, supports, minimumConfidence, minimumLift);
   }
 
   /**
    * Returns string representation.
    */
-  public String toString() {
+  public String toString()
+  {
     StringBuffer s = new StringBuffer();
     s.append(IntSets.toString(antecedent));
     s.append(" => ");

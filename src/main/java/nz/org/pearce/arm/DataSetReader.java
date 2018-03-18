@@ -6,11 +6,13 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
 
-public class DataSetReader {
+public class DataSetReader
+{
 
   private int numTransactions = 0;
 
-  public ItemCounter countItemFrequencies() throws IOException {
+  public ItemCounter countItemFrequencies() throws IOException
+  {
     ItemCounter itemCounter = new ItemCounter();
     HashSet<Integer> itemset = null;
     while ((itemset = nextAsSet()) != null) {
@@ -21,23 +23,28 @@ public class DataSetReader {
     return itemCounter;
   }
 
-  public int getNumTransactions() {
-    return numTransactions;
-  }
+  public int getNumTransactions() { return numTransactions; }
 
-  public static DataSetReader open(String path, Itemizer itemizer) throws IOException {
+  public static DataSetReader open(String path, Itemizer itemizer)
+    throws IOException
+  {
     RandomAccessFile file = new RandomAccessFile(new File(path), "r");
-    BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file.getFD())));
+    BufferedReader reader = new BufferedReader(
+      new InputStreamReader(new FileInputStream(file.getFD())));
     return new DataSetReader(file, reader, itemizer);
   }
 
-  private DataSetReader(RandomAccessFile file, BufferedReader reader, Itemizer itemizer) {
+  private DataSetReader(RandomAccessFile file,
+                        BufferedReader reader,
+                        Itemizer itemizer)
+  {
     this.file = file;
     this.reader = reader;
     this.itemizer = itemizer;
   }
 
-  private HashSet<Integer> nextAsSet() {
+  private HashSet<Integer> nextAsSet()
+  {
     String line = null;
     try {
       line = reader.readLine();
@@ -56,7 +63,8 @@ public class DataSetReader {
     return itemset;
   }
 
-  public int[] next() {
+  public int[] next()
+  {
     HashSet<Integer> itemset = nextAsSet();
     if (itemset == null) {
       return null;
@@ -65,7 +73,8 @@ public class DataSetReader {
     return items;
   }
 
-  public int[] nextAboveMinCount(int minCount, ItemCounter itemCounter) {
+  public int[] nextAboveMinCount(int minCount, ItemCounter itemCounter)
+  {
     HashSet<Integer> itemset = nextAsSet();
     if (itemset == null) {
       return null;
@@ -81,10 +90,12 @@ public class DataSetReader {
     return frequentItems.stream().mapToInt(i -> i).toArray();
   }
 
-  void reset() throws IOException{
+  void reset() throws IOException
+  {
     file.seek(0);
     numTransactions = 0;
-    reader = new BufferedReader(new InputStreamReader(new FileInputStream(file.getFD())));
+    reader = new BufferedReader(
+      new InputStreamReader(new FileInputStream(file.getFD())));
   }
 
   private RandomAccessFile file;

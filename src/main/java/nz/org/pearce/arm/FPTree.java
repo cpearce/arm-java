@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-class FPNode {
-  FPNode(int item, FPNode parent) {
+class FPNode
+{
+  FPNode(int item, FPNode parent)
+  {
     this.item = item;
     this.parent = parent;
   }
 
-  FPNode child(int item) {
+  FPNode child(int item)
+  {
     for (FPNode child : children) {
       if (child.item == item) {
         return child;
@@ -27,17 +30,19 @@ class FPNode {
   ArrayList<FPNode> children = new ArrayList<FPNode>();
 }
 
-public class FPTree {
+public class FPTree
+{
   FPNode root = new FPNode(0, null);
   ItemCounter itemCounter = new ItemCounter();
   HashMap<Integer, ArrayList<FPNode>> itemLists =
-      new HashMap<Integer, ArrayList<FPNode>>();
+    new HashMap<Integer, ArrayList<FPNode>>();
 
   /**
    * Inserts a transaction into the tree. The items in the transaction are
    * assumed to be sorted in non-increasing order of frequency.
    */
-  public void insert(int[] itemset, int count) {
+  public void insert(int[] itemset, int count)
+  {
     FPNode node = root;
     for (int item : itemset) {
       itemCounter.increment(item, count);
@@ -52,7 +57,8 @@ public class FPTree {
     }
   }
 
-  private void addToItemList(int item, FPNode child) {
+  private void addToItemList(int item, FPNode child)
+  {
     ArrayList<FPNode> itemList = itemLists.get(item);
     if (itemList == null) {
       itemList = new ArrayList<FPNode>();
@@ -65,29 +71,32 @@ public class FPTree {
    * Generate frequent patterns using the FP-Growth algorithm.
    */
   public ArrayList<FrequentPattern> growFrequentPatterns(int minCount,
-                                                         int numTransactions) {
-    return growFrequentPatterns(minCount, new ArrayList<Integer>(),
-                                numTransactions);
+                                                         int numTransactions)
+  {
+    return growFrequentPatterns(
+      minCount, new ArrayList<Integer>(), numTransactions);
   }
 
   private ArrayList<FrequentPattern>
-  growFrequentPatterns(int minCount, ArrayList<Integer> path, int pathCount) {
+  growFrequentPatterns(int minCount, ArrayList<Integer> path, int pathCount)
+  {
     ArrayList<FrequentPattern> frequentPatterns =
-        new ArrayList<FrequentPattern>();
+      new ArrayList<FrequentPattern>();
     ArrayList<Integer> items = itemCounter.itemsWithCountAtLeast(minCount);
     for (Integer item : items) {
       path.add(item);
       FPTree conditionalTree = constructConditionalTree(item);
       int newPathCount = Math.min(pathCount, itemCounter.count(item));
       frequentPatterns.addAll(
-          conditionalTree.growFrequentPatterns(minCount, path, newPathCount));
+        conditionalTree.growFrequentPatterns(minCount, path, newPathCount));
       frequentPatterns.add(new FrequentPattern(path, newPathCount));
       path.remove(path.size() - 1);
     }
     return frequentPatterns;
   }
 
-  private FPTree constructConditionalTree(int item) {
+  private FPTree constructConditionalTree(int item)
+  {
     FPTree tree = new FPTree();
     ArrayList<FPNode> itemList = itemLists.get(item);
     for (FPNode node : itemList) {
@@ -97,7 +106,8 @@ public class FPTree {
     return tree;
   }
 
-  private int[] pathFromRootExcluding(FPNode node) {
+  private int[] pathFromRootExcluding(FPNode node)
+  {
     ArrayList<Integer> path = new ArrayList<Integer>();
     while (true) {
       node = node.parent;

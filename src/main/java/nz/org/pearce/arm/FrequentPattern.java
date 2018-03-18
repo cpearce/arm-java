@@ -3,9 +3,11 @@ package nz.org.pearce.arm;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-class FrequentPattern {
+class FrequentPattern
+{
 
-  FrequentPattern(ArrayList<Integer> path, int count) {
+  FrequentPattern(ArrayList<Integer> path, int count)
+  {
     this.itemset = path.stream().mapToInt(i -> i).toArray();
     Arrays.sort(this.itemset);
     this.count = count;
@@ -14,7 +16,8 @@ class FrequentPattern {
   public int[] itemset;
   public int count;
 
-  public String toString() {
+  public String toString()
+  {
     StringBuffer s = new StringBuffer();
     s.append(IntSets.toString(itemset));
     s.append("] count=" + count);

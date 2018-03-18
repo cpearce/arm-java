@@ -81,19 +81,23 @@ public class ARM
     timer.reset();
     long size = writeRules(rules, arguments.outputPath, itemizer);
     long elapsed = timer.elapsed();
-    System.out.println("Wrote rules to file in " + elapsed + " ms, " + MBPS(size, elapsed) + " MB/s");
+    System.out.println("Wrote rules to file in " + elapsed + " ms, " +
+                       MBPS(size, elapsed) + " MB/s");
 
     System.out.println("Total runtime " + total.elapsed() + " ms");
   }
 
-  private String MBPS(long size, long ms) {
+  private String MBPS(long size, long ms)
+  {
     return String.format("%.2f", (double)size / ((double)ms / 1000) / 1000000);
   }
 
-  private long writeRules(HashSet<Rule> rules, String outputPath, Itemizer itemizer)
-    throws IOException
+  private long writeRules(HashSet<Rule> rules,
+                          String outputPath,
+                          Itemizer itemizer) throws IOException
   {
-    PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(outputPath)));
+    PrintWriter writer =
+      new PrintWriter(new BufferedWriter(new FileWriter(outputPath)));
     writer.println("Antecedent => Consequent, Confidence, Lift, Support");
     for (Rule rule : rules) {
       writeItems(writer, rule.antecedent, itemizer);
