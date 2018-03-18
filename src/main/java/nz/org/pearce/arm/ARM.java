@@ -36,8 +36,7 @@ public class ARM
     Timer total = new Timer();
     Timer timer = new Timer();
     System.out.println("Counting item frequencies");
-    Itemizer itemizer = new Itemizer();
-    DataSetReader reader = DataSetReader.open(arguments.inputPath, itemizer);
+    DataSetReader reader = DataSetReader.open(arguments.inputPath);
     ItemCounter itemCounter = reader.countItemFrequencies();
     int numTransactions = reader.getNumTransactions();
     System.out.println("Counted item frequencies in " + timer.elapsed() +
@@ -79,7 +78,7 @@ public class ARM
 
     System.out.println("Writing rules to file");
     timer.reset();
-    long size = writeRules(rules, arguments.outputPath, itemizer);
+    long size = writeRules(rules, arguments.outputPath, reader.getItemizer());
     long elapsed = timer.elapsed();
     System.out.println("Wrote rules to file in " + elapsed + " ms, " +
                        MBPS(size, elapsed) + " MB/s");

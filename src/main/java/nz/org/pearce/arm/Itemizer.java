@@ -1,16 +1,10 @@
 package nz.org.pearce.arm;
 
 import java.util.HashMap;
+import java.util.Arrays;
 
 public class Itemizer
 {
-
-  public Itemizer()
-  {
-    idToStr = new HashMap<Integer, String>();
-    strToId = new HashMap<String, Integer>();
-  }
-
   public int idOf(String item)
   {
     Integer i = strToId.get(item);
@@ -27,11 +21,7 @@ public class Itemizer
 
   public String nameOf(int id)
   {
-    String n = idToStr.get(id);
-    if (n == null) {
-      return "UnknownItem";
-    }
-    return n;
+    return idToStr.getOrDefault(id, "UnknownItem");
   }
 
   public String[] namesOf(int[] items)
@@ -44,7 +34,36 @@ public class Itemizer
     return names;
   }
 
-  private HashMap<Integer, String> idToStr;
-  private HashMap<String, Integer> strToId;
+  public ItemCounter sort(ItemCounter itemCounter)
+  {
+    String[] itemNames = new String[idToStr.size()];
+    int index = 0;
+    for (String name : strToId.keySet()) {
+      itemNames[index++] = name;
+    }
+    Arrays.sort(itemNames);
+
+    HashMap<Integer, String> newIdToStr = new HashMap<Integer, String>();
+    HashMap<String, Integer> newStrToId = new HashMap<String, Integer>();
+    ItemCounter newItemCounter = new ItemCounter();
+
+    for (index = 0; index < itemNames.length; index++) {
+      String name = itemNames[index];
+      int id = index + 1;
+      newIdToStr.put(id, name);
+      newStrToId.put(name, id);
+      int oldId = idOf(name);
+      int count = itemCounter.count(oldId);
+      newItemCounter.increment(id, count);
+    }
+
+    idToStr = newIdToStr;
+    strToId = newStrToId;
+
+    return newItemCounter;
+  }
+
+  private HashMap<Integer, String> idToStr = new HashMap<Integer, String>();
+  private HashMap<String, Integer> strToId = new HashMap<String, Integer>();
   private int nextId = 1;
 }
