@@ -21,7 +21,11 @@ public class Itemizer
 
   public String nameOf(int id)
   {
-    return idToStr.getOrDefault(id, "UnknownItem");
+    String name = idToStr.get(id);
+    if (name == null) {
+      throw new Error("Lookup of id failed");
+    }
+    return name;
   }
 
   public String[] namesOf(int[] items)
