@@ -26,11 +26,13 @@ public class RuleGenerator
           continue;
         }
         int size = rule1.consequent.length;
-        int overlap = IntSets.intersectionSize(rule1.consequent, rule2.consequent);
+        int overlap =
+          IntSets.intersectionSize(rule1.consequent, rule2.consequent);
         if (overlap != size - 1) {
           continue;
         }
-        Rule rule = Rule.merge(rule1, rule2, minimumConfidence, minimumLift, supports);
+        Rule rule =
+          Rule.merge(rule1, rule2, minimumConfidence, minimumLift, supports);
         if (rule != null) {
           rules.add(rule);
         }
