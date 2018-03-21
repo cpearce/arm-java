@@ -69,7 +69,7 @@ public class IntSets
     return C;
   }
 
-  public static int[] intersection(int[] A, int[] B)
+  public static int intersectionSize(int[] A, int[] B)
   {
     int a = 0;
     int b = 0;
@@ -87,6 +87,20 @@ public class IntSets
         b++;
       }
     }
+
+    return count;
+  }
+
+  public static int[] intersection(int[] A, int[] B)
+  {
+    verifySorted(A);
+    verifySorted(B);
+
+    int a = 0;
+    int b = 0;
+
+    // Count number of elements in the union.
+    int count = intersectionSize(A, B);
 
     // Build result.
     int[] C = new int[count];
