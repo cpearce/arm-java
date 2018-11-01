@@ -44,19 +44,6 @@ public class AppTest
         }
     }
 
-    public void testIntSetsWithout() {
-        int[][][] testCases = {
-            {{1,2,3}, {1}, {2,3}},
-            {{1,2,3}, {2}, {1,3}},
-            {{1,2,3}, {3}, {1,2}},
-            {{1}, {1}, {}},
-            {{}, {0}, {}},
-        };
-        for (int[][] test: testCases) {
-            assertTrue(Arrays.equals(IntSets.without(test[0], test[1][0]), test[2]));
-        }
-    }
-
     public void testIntSetsIntersection() {
         int[][][] testCases = {
             {{1,2,3}, {4,5,6}, {}},
@@ -71,6 +58,29 @@ public class AppTest
         for (int[][] test: testCases) {
             assertTrue(Arrays.equals(IntSets.intersection(test[0], test[1]), test[2]));
         }
+    }
+
+    public void testIntSetsSubtract() {
+        int[][][] testCases = {
+            {{1,2,3,4}, {1,2}, {3,4}},
+            {{1,2,3}, {}, {1,2,3}},
+            {{1,2,3}, {1,2,3}, {}},
+            {{1,2}, {1}, {2}},
+            {{1,2}, {2}, {1}},
+            {{1,2,3}, {1}, {2,3}},
+            {{1,2,3}, {2}, {1,3}},
+            {{1,2,3}, {3}, {1,2}},
+            {{1}, {1}, {}},
+            {{}, {0}, {}},
+        };
+        for (int[][] test: testCases) {
+            assertTrue(Arrays.equals(IntSets.subtract(test[0], test[1]), test[2]));
+        }
+    }
+
+    public void testIntSetsCompare() {
+        assertTrue(IntSets.compare(new int[]{1,3,4}, new int[]{1,3,5}) < 0);
+        assertTrue(IntSets.compare(new int[]{1,3,4}, new int[]{1,3,3}) > 0);
     }
 
 }

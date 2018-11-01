@@ -3,21 +3,6 @@ package nz.org.pearce.arm;
 public class IntSets
 {
 
-  public static int[] without(int[] A, int value)
-  {
-    if (A.length == 0) {
-      return new int[0];
-    }
-    int[] B = new int[A.length - 1];
-    int index = 0;
-    for (int i : A) {
-      if (i != value) {
-        B[index++] = i;
-      }
-    }
-    return B;
-  }
-
   public static int[] union(int[] A, int[] B)
   {
     int a = 0;
@@ -125,6 +110,68 @@ public class IntSets
       }
     }
     return C;
+  }
+
+  // Subtract B from A;
+  public static int[] subtract(int[] A, int[] B) {
+
+    // Make 1 pass to count length of result.
+    int ap = 0;
+    int bp = 0;
+    int count = 0;
+    while (ap < A.length && bp < B.length) {
+        if (A[ap] < B[bp]) {
+            count++;
+            ap++;
+        } else {
+            ap++;
+            bp++;
+        }
+    }
+    count += A.length - ap;
+
+    // Make a second pass, writing result.
+    int[] C = new int[count];
+    int i = 0;
+    ap = 0;
+    bp = 0;
+    while (ap < A.length && bp < B.length) {
+        if (A[ap] < B[bp]) {
+            C[i++] = A[ap];
+            ap++;
+        } else {
+            ap++;
+            bp++;
+        }
+    }
+    while (ap < A.length) {
+      C[i++] = A[ap++];
+    }
+
+    return C;
+  }
+
+  public static int compare(int[] a, int[] b) {
+    if (a == null) {
+        return b == null ? 0 : -1;
+    }
+    if (b == null) {
+        return 1;
+    }
+    if (a.length < b.length) {
+      return -1;
+    }
+    if (b.length < a.length) {
+      return 1;
+    }
+    int cmp;
+    for (int i = 0; i < a.length; i++) {
+        cmp = Integer.compare(a[i], b[i]);
+        if (cmp != 0) {
+            return cmp;
+        }
+    }
+    return 0;
   }
 
   public static String toString(int[] A)

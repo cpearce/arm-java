@@ -69,10 +69,10 @@ public class ARM
     System.out.println("Generating rules...");
     timer.reset();
     RuleGenerator ruleGenerator = new RuleGenerator();
-    HashSet<Rule> rules = ruleGenerator.generate(itemsets,
-                                                 numTransactions,
-                                                 arguments.minimumConfidence,
-                                                 arguments.minimumLift);
+    ArrayList<Rule> rules = ruleGenerator.generate(itemsets,
+                                                   numTransactions,
+                                                   arguments.minimumConfidence,
+                                                   arguments.minimumLift);
     System.out.println("Generated " + rules.size() + " rules in " +
                        timer.elapsed() + " ms");
 
@@ -91,7 +91,7 @@ public class ARM
     return String.format("%.2f", (double)size / ((double)ms / 1000) / 1000000);
   }
 
-  private long writeRules(HashSet<Rule> rules,
+  private long writeRules(ArrayList<Rule> rules,
                           String outputPath,
                           Itemizer itemizer) throws IOException
   {
