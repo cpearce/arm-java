@@ -91,6 +91,12 @@ public class IntSets
     return count;
   }
 
+  public static void verifySorted(int[] A) {
+    for (int i = 1; i < A.length; i++) {
+      assert (A[i-1] <= A[i]);
+    }
+  }
+
   public static int[] intersection(int[] A, int[] B)
   {
     verifySorted(A);
